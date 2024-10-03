@@ -1,10 +1,13 @@
 from sympy import Matrix, pprint
 
-keywords = ['r', 'rr', 'q', 'n', 'inv', 'colspace', 'rowspace']
+keywords = ['r', 'rr', 'q', 'n', 'inv', 'colspace', 'rowspace', 'rank']
+
+prev_matrix = None
+
 
 def parse_matrix():
     matrix = []
-    print("Enter matrix:")
+    print("Enter matrix (or 'p' for previous matrix):")
     while True:
         k = input().strip()
         if k == "":
@@ -12,6 +15,16 @@ def parse_matrix():
                 break
             else:
                 continue
+        elif k == 'p':
+            if prev_matrix:
+                return prev_matrix, None
+            else:
+                print("u never entered a matrix dumbass")
+                continue
+        elif k == 'q':
+            print("ok bye")
+            return [[1]], 'q'
+            
         line = k
         
         if line in keywords:
@@ -23,15 +36,17 @@ def parse_matrix():
     return matrix, None
 
 def main():
+    global prev_matrix
     while True:
 
         while True:
             matrix, option = parse_matrix()
+            prev_matrix = matrix
             A = Matrix(matrix)
 
             while True:
                 #  
-                choice = option if option else input("\nEnter 'r' for echelon form, 'rr' for reduced echelon form, or 'q' to quit:").strip().lower()
+                choice = option if option else input(f"\nEnter command from {keywords}").strip().lower()
                 
                 
                 if choice == 'r':
@@ -46,6 +61,12 @@ def main():
                     pprint(A.columnspace())
                 elif choice == 'rowspace':
                     pprint(A.rowspace())
+                elif choice == 'rank':
+                    pprint(A.rank())
+                # elif choice == 'lu':
+                #     pprint(A.LUdecomposition())
+                #     print("got rid of fractoins")
+                #     pprint(A.LUdecompositionFF())
                 elif choice == 'q':
                     print("fuck linear")
                     return
