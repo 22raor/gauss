@@ -1,6 +1,6 @@
 from sympy import Matrix, pprint
 
-keywords = ['r', 'rr', 'q', 'n', 'inv']
+keywords = ['r', 'rr', 'q', 'n', 'inv', 'colspace', 'rowspace']
 
 def parse_matrix():
     matrix = []
@@ -36,21 +36,21 @@ def main():
                 
                 if choice == 'r':
                     pprint(A.echelon_form())
-                    
                 elif choice == 'rr':
                     pprint(A.rref(pivots=False))
-                    
                 elif choice == 'n':
                     pprint(A.nullspace())
-                    
                 elif choice == 'inv':
                     pprint(A.inv())
-                    
+                elif choice == 'colspace':
+                    pprint(A.columnspace())
+                elif choice == 'rowspace':
+                    pprint(A.rowspace())
                 elif choice == 'q':
                     print("fuck linear")
                     return
                 else:
-                    print("Invalid input. Please enter 'r', 'rr', or 'q'.")
+                    print("Invalid input. Please enter something from", keywords)
                 
                 if choice in keywords:
                     break
