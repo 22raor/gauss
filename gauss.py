@@ -1,8 +1,19 @@
 from sympy import Matrix, pprint
+import readline
 
 keywords = ['r', 'rr', 'q', 'n', 'inv', 'colspace', 'rowspace', 'rank']
 
 prev_matrix = None
+
+def completer(text, state):
+    options = [cmd for cmd in keywords if cmd.startswith(text)]
+    if state < len(options):
+        return options[state]
+    else:
+        return None
+
+readline.set_completer(completer)
+readline.parse_and_bind("tab: complete")
 
 
 def parse_matrix():
