@@ -50,21 +50,28 @@ def parse_matrix(prompt="Enter matrix"):
             matrix.append(row)
     return matrix, None
 
+
+def get_colspace_proj_matrix(A: Matrix) -> Matrix:   
+    if not A.rank == A.cols: # if A doesn't have full col rank, reconstruct using basis
+        _, pivot_columns = A.rref()
+        A = A[:, pivot_columns]
+    return A * (A.T * A).inv() * A.T 
+
+
+
 def project_onto_space(A, vector, space):
     """Perform orthogonal projection onto the column space or null space."""
     b = Matrix(vector)
     if space == 'colspace':
-        P = A * (A.T * A).inv() * A.T 
-        print("Projection Matrix")
-        pprint(P)
-    elif space == 'nullspace':
-        P_row_space = A.T * (A * A.T).pinv() * A  
+        P = get_colspace_proj_matrix(A)
 
-        I = Matrix.eye(A.rows) 
-        P = I - P_row_space
-    
-            
+    elif space == 'nullspace':
+        V_perp = get_colspace_proj_matrix(A.T)
+        P = Matrix.eye(V_perp.rows) - V_perp
+    print("Projection Matrix")
+    pprint(P)
     return P * b
+
 
 def main():
     global prev_matrix
