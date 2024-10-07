@@ -55,9 +55,15 @@ def project_onto_space(A, vector, space):
     b = Matrix(vector)
     if space == 'colspace':
         P = A * (A.T * A).inv() * A.T 
+        print("Projection Matrix")
+        pprint(P)
     elif space == 'nullspace':
-        N = A.nullspace()[0]  
-        P = N * (N.T * N).inv() * N.T 
+        P_row_space = A.T * (A * A.T).pinv() * A  
+
+        I = Matrix.eye(A.rows) 
+        P = I - P_row_space
+    
+            
     return P * b
 
 def main():
