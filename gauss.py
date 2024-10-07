@@ -1,9 +1,11 @@
 from sympy import Matrix, pprint
 import readline
 
-keywords = ['r', 'rr', 'q', 'nullspace', 'inv', 'colspace', 'rowspace', 'rank', 'orthoproject']
+keywords = ['r', 'rr', 'q', 'nullspace', 'inv', 'colspace', 'rowspace', 'rank', 'orthoproject', 'show']
 
 prev_matrix = None
+
+valid_chars = set("0123456789- ")
 
 def completer(text, state):
     options = [cmd for cmd in keywords if cmd.startswith(text)]
@@ -21,6 +23,8 @@ def parse_matrix(prompt="Enter matrix"):
     print(f"{prompt} (or 'p' for previous matrix):")
     while True:
         k = input().strip()
+        # print(k, int(k))
+        k = k.replace("−","-")
         if k == "":
             if len(matrix) > 0:
                 break
@@ -40,7 +44,7 @@ def parse_matrix(prompt="Enter matrix"):
         
         if line in keywords:
             return matrix, line
-        clean_line = ''.join(filter(lambda x: x.isdigit() or x.isspace(), line)).strip()
+        clean_line = ''.join(filter(lambda x: x in valid_chars, line)).strip()
         if clean_line:
             row = list(map(int, clean_line.split()))
             matrix.append(row)
@@ -50,10 +54,10 @@ def project_onto_space(A, vector, space):
     """Perform orthogonal projection onto the column space or null space."""
     b = Matrix(vector)
     if space == 'colspace':
-        P = A * (A.T * A).inv() * A.T  # Projection matrix onto column space
+        P = A * (A.T * A).inv() * A.T 
     elif space == 'nullspace':
-        N = A.nullspace()[0]  # Get nullspace vector
-        P = N * (N.T * N).inv() * N.T  # Projection matrix onto nullspace
+        N = A.nullspace()[0]  
+        P = N * (N.T * N).inv() * N.T 
     return P * b
 
 def main():
@@ -69,6 +73,8 @@ def main():
                 
                 if choice == 'r':
                     pprint(A.echelon_form())
+                elif choice == 'show':
+                    pprint(A)
                 elif choice == 'rr':
                     pprint(A.rref(pivots=False))
                 elif choice == 'nullspace':
