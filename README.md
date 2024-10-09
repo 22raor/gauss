@@ -1,11 +1,12 @@
-make a binding to run gauss.py with python3
+install using `pip install gauss-linear` (requires Python 3.8+)
 then just do
 `gauss` and then paste in the matrix
-### options: 
+### some options: 
 `n` - computes the null space
 `r` - computes a row echelon form
 `rr` - computes the rref
 `inv` - computes the inverse
+`orthoproject` - orthogonal projections
 `q` - ends the program
 
-ps, make sure you have SymPy installed. 
+there's a lot more commands, you can figure those out yourself lol
